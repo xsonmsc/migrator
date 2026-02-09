@@ -2,7 +2,7 @@
 
 class MigrationEngine
 {
-    public static function buildInsert($table,$mappings)
+    public static function buildInsert($table,$mappings,$mode="ignore")
     {
         $cols=[];
         $params=[];
@@ -16,8 +16,23 @@ class MigrationEngine
             }
         }
 
-        return "INSERT INTO {$table}(".implode(",",$cols).")
+        $base = "INSERT INTO {$table}(".implode(",",$cols).")
                 VALUES(".implode(",",$params).")";
+
+        if ($mode === "ignore") {
+            return "INSERT IGNORE INTO {$table}(".implode(",",$cols).")
+                VALUES(".implode(",",$params).")";
+        }
+
+        if ($mode === "update") {
+            $updates = [];
+            foreach ($cols as $c) {
+                $updates[] = "{$c}=VALUES({$c})";
+            }
+            return $base . " ON DUPLICATE KEY UPDATE " . implode(",", $updates);
+        }
+
+        return $base;
     }
 
     public static function buildRow($row,$mappings)

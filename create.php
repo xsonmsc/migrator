@@ -218,6 +218,14 @@
                     <label data-i18n="target_table">Hedef Tablo</label>
                     <select id="table2"></select>
                 </div>
+                <div>
+                    <label data-i18n="dup_mode">Duplicate Key</label>
+                    <select id="dup_mode">
+                        <option value="ignore">IGNORE</option>
+                        <option value="update">UPDATE</option>
+                        <option value="error">ERROR</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -536,6 +544,7 @@ function generate(){
         db2: db2.value,
         table1: table1.value,
         table2: table2.value,
+        dup_mode: document.getElementById("dup_mode").value,
         create_table: false,
         mappings: collectMappings(),
         new_columns: collectNewColumns(),
@@ -566,6 +575,7 @@ const I18N = {
         source_cols: "Source Columns",
         target_cols: "Target Columns",
         target_help: "Drag a source column onto the target. You can choose type and transform.",
+        dup_mode: "Duplicate Key",
         new_cols: "New Target Columns (optional)",
         add_col: "+ Add Column",
         apply_targets: "Apply to target list",
@@ -592,6 +602,7 @@ const I18N = {
         source_cols: "Kaynak Kolonlar",
         target_cols: "Hedef Kolonlar",
         target_help: "Hedef kolona sürükle-bırak ile kaynak eşleştir. Kolon tipi ve dönüşüm seçebilirsin.",
+        dup_mode: "Duplicate Key",
         new_cols: "Yeni Hedef Kolonlar (opsiyonel)",
         add_col: "+ Yeni Kolon",
         apply_targets: "Hedef listesine uygula",
@@ -618,6 +629,7 @@ const I18N = {
         source_cols: "Mənbə Sütunlar",
         target_cols: "Hədəf Sütunlar",
         target_help: "Hədəf sütununa sürüklə-burax ilə mənbə xəritələ. Tip və çevirmə seçə bilərsən.",
+        dup_mode: "Duplicate Key",
         new_cols: "Yeni Hədəf Sütunlar (opsional)",
         add_col: "+ Yeni Sütun",
         apply_targets: "Hədəf siyahısına tətbiq et",
