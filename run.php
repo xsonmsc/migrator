@@ -13,6 +13,7 @@ if (!file_exists($path)) {
 }
 
 echo "<h3>Running Migration: " . htmlspecialchars($file) . "</h3>";
+echo "<div style='margin:8px 0;color:#555'>Lütfen sayfayı kapatmayın. İşlem sürerken veri kaybı olabilir.</div>";
 
 echo "<div style='width:100%;background:#eee;height:25px'>
         <div id='bar'
@@ -22,4 +23,8 @@ echo "<div style='width:100%;background:#eee;height:25px'>
       </div><br>";
 
 require $path;
+
+echo "<div style='margin-top:16px;display:flex;gap:8px;flex-wrap:wrap'>
+        <button onclick=\"location.href='index.php'\" style='padding:8px 12px;border:1px solid #ccc;background:#f7f7f7;cursor:pointer'>Geri Dön</button>
+      </div>";
 ?>

@@ -24,6 +24,8 @@ while (file_exists($dir . "/" . $final . ".php")) {
 
 $file = $dir . "/" . $final . ".php";
 
+$dupMode = $data["dup_mode"] ?? "ignore";
+
 $code="<?php
 require __DIR__.'/../db.php';
 require __DIR__.'/../core/MigrationEngine.php';
@@ -42,7 +44,7 @@ if (!empty($globalPhp)) {
 
 if($data["create_table"])
 {
-    $cols=json_encode($data["new_columns"],JSON_PRETTY_PRINT);
+    $cols=var_export($data["new_columns"], true);
 
     $code.="
 TableManager::createIfNotExists(
@@ -53,7 +55,7 @@ TableManager::createIfNotExists(
 ";
 }
 
-$map=json_encode($data["mappings"],JSON_PRETTY_PRINT);
+$map=var_export($data["mappings"], true);
 
 $code.="
 \$mappings={$map};
@@ -62,11 +64,18 @@ $code.="
 
 echo '<div style=\"width:100%;background:#eee\"><div id=\"bar\" style=\"width:0%;background:#000;color:#fff\">0%</div></div>';
 
-\$sql=MigrationEngine::buildInsert('{$data["table2"]}',\$mappings);
+\$sql=MigrationEngine::buildInsert('{$data["table2"]}',\$mappings,'{$dupMode}');
 \$insert=\$newDB->prepare(\$sql);
 
 \$total=count(\$rows);
 \$i=0;
+
+if (\$total === 0) {
+    echo \"<script>
+    document.getElementById('bar').style.width='100%';
+    document.getElementById('bar').textContent='100%';
+    </script>\";
+}
 
 foreach(\$rows as \$row)
 {
@@ -82,12 +91,19 @@ foreach(\$rows as \$row)
     \$insert->execute(\$data);
 
     \$i++;
+    \$pct = (\$total > 0) ? (\$i/\$total*100) : 100;
     echo \"<script>
-    document.getElementById('bar').style.width='\".(\$i/\$total*100).\"%';
+    document.getElementById('bar').style.width='\".\$pct.\"%';
+    document.getElementById('bar').textContent='\".round(\$pct).\"%';
     </script>\";
     flush();
 }
 
+echo '<script>
+document.getElementById("bar").style.width="100%";
+document.getElementById("bar").textContent="100%";
+setTimeout(function(){ window.location.href="index.php"; }, 1500);
+</script>';
 echo 'DONE';
 ";
 
