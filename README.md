@@ -2,6 +2,8 @@
 
 MySQL tabloları arasında veri taşımak için sürükle-bırak tabanlı bir migration aracı.
 
+<img width="1904" height="1027" alt="image" src="https://github.com/user-attachments/assets/9da3cf41-8e9f-4570-9ee4-637dd30e7852" />
+
 ## Özellikler
 - DB ve tablo listelerini otomatik çekme
 - Kolonlar arası drag & drop mapping
