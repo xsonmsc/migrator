@@ -177,10 +177,15 @@
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
             <div>
                 <h1>Migration Studio</h1>
-                <div class="sub">Kaynak ve hedef tablolar arasında sürükle-bırak ile alan eşleştir.</div>
+                <div class="sub" data-i18n="create_sub">Kaynak ve hedef tablolar arasında sürükle-bırak ile alan eşleştir.</div>
             </div>
             <div class="actions">
-                <button class="secondary" onclick="location.href='index.php'">Ana Sayfa</button>
+                <button class="secondary" onclick="location.href='index.php'" data-i18n="home_btn">Ana Sayfa</button>
+                <select id="lang" class="secondary" style="padding:6px 10px;border-radius:8px;">
+                    <option value="en">EN</option>
+                    <option value="tr">TR</option>
+                    <option value="az">AZ</option>
+                </select>
             </div>
         </div>
     </header>
@@ -189,7 +194,7 @@
         <div class="card">
             <div class="grid-2">
                 <div>
-                    <label>Migration Name</label>
+                    <label data-i18n="mig_name">Migration Name</label>
                     <input id="mig_name" placeholder="ornek_migration">
                 </div>
             </div>
@@ -198,19 +203,19 @@
         <div class="card">
             <div class="grid-2">
                 <div>
-                    <label>Kaynak DB</label>
+                    <label data-i18n="source_db">Kaynak DB</label>
                     <select id="db1"></select>
                 </div>
                 <div>
-                    <label>Hedef DB</label>
+                    <label data-i18n="target_db">Hedef DB</label>
                     <select id="db2"></select>
                 </div>
                 <div>
-                    <label>Kaynak Tablo</label>
+                    <label data-i18n="source_table">Kaynak Tablo</label>
                     <select id="table1"></select>
                 </div>
                 <div>
-                    <label>Hedef Tablo</label>
+                    <label data-i18n="target_table">Hedef Tablo</label>
                     <select id="table2"></select>
                 </div>
             </div>
@@ -219,31 +224,31 @@
         <div class="card">
             <div class="mapping">
                 <div>
-                    <label>Kaynak Kolonlar</label>
+                    <label data-i18n="source_cols">Kaynak Kolonlar</label>
                     <div id="source_list" class="list"></div>
                 </div>
                 <div>
-                    <label>Hedef Kolonlar</label>
+                    <label data-i18n="target_cols">Hedef Kolonlar</label>
                     <div id="target_list" class="list"></div>
-                    <div class="small">Hedef kolona sürükle-bırak ile kaynak eşleştir. Kolon tipi ve dönüşüm seçebilirsin.</div>
+                    <div class="small" data-i18n="target_help">Hedef kolona sürükle-bırak ile kaynak eşleştir. Kolon tipi ve dönüşüm seçebilirsin.</div>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <label>Yeni Hedef Kolonlar (opsiyonel)</label>
+            <label data-i18n="new_cols">Yeni Hedef Kolonlar (opsiyonel)</label>
             <div id="new_columns"></div>
             <div class="actions">
-                <button class="secondary" onclick="addNewColumn()">+ Yeni Kolon</button>
-                <button class="secondary" onclick="useNewColumnsAsTargets()">Hedef listesine uygula</button>
+                <button class="secondary" onclick="addNewColumn()" data-i18n="add_col">+ Yeni Kolon</button>
+                <button class="secondary" onclick="useNewColumnsAsTargets()" data-i18n="apply_targets">Hedef listesine uygula</button>
             </div>
         </div>
 
         <div class="card">
-            <label>Custom PHP (global)</label>
+            <label data-i18n="global_php">Custom PHP (global)</label>
             <textarea id="global_php" placeholder="Örn: if(isset($row['status'])) { ... }"></textarea>
             <div class="actions">
-                <button onclick="generate()">Generate Migration</button>
+                <button onclick="generate()" data-i18n="generate">Generate Migration</button>
             </div>
         </div>
     </div>
@@ -373,13 +378,13 @@ function renderTargets(cols, { merge = false } = {}){
         drop.className = "dropzone";
         const dropText = document.createElement("div");
         dropText.className = "drop-text";
-        dropText.textContent = "Kaynak kolon bırak";
+        dropText.textContent = i18n("drop_here");
         const clearBtn = document.createElement("button");
         clearBtn.className = "clear-btn";
         clearBtn.type = "button";
         clearBtn.textContent = "Kaldır";
         clearBtn.addEventListener("click", () => {
-            dropText.textContent = "Kaynak kolon bırak";
+            dropText.textContent = i18n("drop_here");
             drop.classList.remove("filled");
             delete drop.dataset.source;
         });
@@ -412,13 +417,13 @@ function renderTargets(cols, { merge = false } = {}){
         phpWrap.className = "php-wrap";
         const php = document.createElement("input");
         php.className = "php";
-        php.placeholder = "Custom PHP (return)";
+        php.placeholder = i18n("php_placeholder");
         phpWrap.appendChild(php);
 
         const addPhpBtn = document.createElement("button");
         addPhpBtn.className = "secondary";
         addPhpBtn.type = "button";
-        addPhpBtn.textContent = "+ PHP";
+        addPhpBtn.textContent = i18n("php_btn");
         addPhpBtn.addEventListener("click", () => {
             phpWrap.classList.toggle("active");
             if (phpWrap.classList.contains("active")) {
@@ -451,7 +456,7 @@ function addNewColumn(){
     row.className = "target-row";
     const name = document.createElement("input");
     name.className = "new_name";
-    name.placeholder = "column_name";
+    name.placeholder = i18n("col_name_placeholder");
 
     const type = document.createElement("select");
     type.className = "new_type";
@@ -465,7 +470,7 @@ function addNewColumn(){
     const del = document.createElement("button");
     del.className = "secondary";
     del.type = "button";
-    del.textContent = "Sil";
+    del.textContent = i18n("delete_btn");
     del.addEventListener("click", () => row.remove());
 
     row.appendChild(name);
@@ -481,7 +486,7 @@ function useNewColumnsAsTargets(){
         if (name) list.push({ Field: name });
     });
     if (list.length === 0) {
-        alert("Önce yeni kolon ekleyin.");
+        alert(i18n("add_col_first"));
         return;
     }
     renderTargets(list, { merge: true });
@@ -522,7 +527,7 @@ function collectNewColumns(){
 function generate(){
     const name = document.getElementById("mig_name").value.trim();
     if (!name) {
-        alert("Migration name gerekli.");
+        alert(i18n("name_required"));
         return;
     }
     const payload = {
@@ -542,12 +547,123 @@ function generate(){
         body: new URLSearchParams({ config: JSON.stringify(payload) })
     }).then(r => r.json()).then(res => {
         if (res && res.ok) {
-            alert("Oluşturuldu: " + res.name);
+            alert(i18n("created") + " " + res.name);
         } else {
-            alert("Hata: " + (res && res.error ? res.error : "unknown"));
+            alert(i18n("error") + " " + (res && res.error ? res.error : "unknown"));
         }
     });
 }
+
+const I18N = {
+    en: {
+        create_sub: "Map fields between source and target tables with drag & drop.",
+        home_btn: "Home",
+        mig_name: "Migration Name",
+        source_db: "Source DB",
+        target_db: "Target DB",
+        source_table: "Source Table",
+        target_table: "Target Table",
+        source_cols: "Source Columns",
+        target_cols: "Target Columns",
+        target_help: "Drag a source column onto the target. You can choose type and transform.",
+        new_cols: "New Target Columns (optional)",
+        add_col: "+ Add Column",
+        apply_targets: "Apply to target list",
+        global_php: "Custom PHP (global)",
+        generate: "Generate Migration",
+        drop_here: "Drop source column",
+        php_btn: "+ PHP",
+        php_placeholder: "Custom PHP (return)",
+        col_name_placeholder: "column_name",
+        delete_btn: "Delete",
+        add_col_first: "Please add a new column first.",
+        name_required: "Migration name is required.",
+        created: "Created:",
+        error: "Error:"
+    },
+    tr: {
+        create_sub: "Kaynak ve hedef tablolar arasında sürükle-bırak ile alan eşleştir.",
+        home_btn: "Ana Sayfa",
+        mig_name: "Migration Name",
+        source_db: "Kaynak DB",
+        target_db: "Hedef DB",
+        source_table: "Kaynak Tablo",
+        target_table: "Hedef Tablo",
+        source_cols: "Kaynak Kolonlar",
+        target_cols: "Hedef Kolonlar",
+        target_help: "Hedef kolona sürükle-bırak ile kaynak eşleştir. Kolon tipi ve dönüşüm seçebilirsin.",
+        new_cols: "Yeni Hedef Kolonlar (opsiyonel)",
+        add_col: "+ Yeni Kolon",
+        apply_targets: "Hedef listesine uygula",
+        global_php: "Custom PHP (global)",
+        generate: "Generate Migration",
+        drop_here: "Kaynak kolon bırak",
+        php_btn: "+ PHP",
+        php_placeholder: "Custom PHP (return)",
+        col_name_placeholder: "column_name",
+        delete_btn: "Sil",
+        add_col_first: "Önce yeni kolon ekleyin.",
+        name_required: "Migration name gerekli.",
+        created: "Oluşturuldu:",
+        error: "Hata:"
+    },
+    az: {
+        create_sub: "Mənbə və hədəf cədvəllər arasında sürüklə-burax ilə sahə xəritələyin.",
+        home_btn: "Ana Səhifə",
+        mig_name: "Migration Name",
+        source_db: "Mənbə DB",
+        target_db: "Hədəf DB",
+        source_table: "Mənbə Cədvəl",
+        target_table: "Hədəf Cədvəl",
+        source_cols: "Mənbə Sütunlar",
+        target_cols: "Hədəf Sütunlar",
+        target_help: "Hədəf sütununa sürüklə-burax ilə mənbə xəritələ. Tip və çevirmə seçə bilərsən.",
+        new_cols: "Yeni Hədəf Sütunlar (opsional)",
+        add_col: "+ Yeni Sütun",
+        apply_targets: "Hədəf siyahısına tətbiq et",
+        global_php: "Custom PHP (global)",
+        generate: "Generate Migration",
+        drop_here: "Mənbə sütunu burax",
+        php_btn: "+ PHP",
+        php_placeholder: "Custom PHP (return)",
+        col_name_placeholder: "column_name",
+        delete_btn: "Sil",
+        add_col_first: "Əvvəl yeni sütun əlavə edin.",
+        name_required: "Migration adı vacibdir.",
+        created: "Yaradıldı:",
+        error: "Xəta:"
+    }
+};
+
+function detectLang() {
+    const saved = localStorage.getItem("lang");
+    if (saved && I18N[saved]) return saved;
+    const sys = (navigator.language || "en").toLowerCase();
+    if (sys.startsWith("tr")) return "tr";
+    if (sys.startsWith("az")) return "az";
+    return "en";
+}
+
+function i18n(key) {
+    const lang = detectLang();
+    return (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key;
+}
+
+function applyLang(lang) {
+    const dict = I18N[lang] || I18N.en;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+    });
+    localStorage.setItem("lang", lang);
+    document.documentElement.lang = lang;
+}
+
+const langSel = document.getElementById("lang");
+const initLang = detectLang();
+langSel.value = initLang;
+applyLang(initLang);
+langSel.addEventListener("change", () => applyLang(langSel.value));
 
 db1.addEventListener("change", () => loadTables(db1, table1));
 db2.addEventListener("change", () => loadTables(db2, table2));
