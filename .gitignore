@@ -1,2 +1,4 @@
 migrations/*
+backups/*
 !migrations/.gitkeep
+!backups/.gitkeep
