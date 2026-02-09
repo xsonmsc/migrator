@@ -2,7 +2,27 @@
 
 $data=json_decode($_POST["config"],true);
 
-$file=__DIR__."/../migrations/".$data["name"].".php";
+header("Content-Type: application/json");
+
+$rawName = $data["name"] ?? "migration";
+$base = preg_replace("/[^A-Za-z0-9_-]+/", "_", $rawName);
+$base = trim($base, "_-");
+if ($base === "") {
+    $base = "migration";
+}
+
+$dir = __DIR__ . "/../migrations";
+if (!is_dir($dir)) {
+    mkdir($dir, 0777, true);
+}
+$final = $base;
+$i = 1;
+while (file_exists($dir . "/" . $final . ".php")) {
+    $final = $base . "_" . $i;
+    $i++;
+}
+
+$file = $dir . "/" . $final . ".php";
 
 $code="<?php
 require __DIR__.'/../db.php';
@@ -73,5 +93,8 @@ echo 'DONE';
 
 file_put_contents($file,$code);
 
-echo "CREATED";
+echo json_encode([
+    "ok" => true,
+    "name" => $final
+]);
 ?>

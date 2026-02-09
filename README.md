@@ -1,6 +1,6 @@
 # Migration Studio
 
-MySQL tabloları arasında veri taşımak için sürükle‑bırak tabanlı bir migration aracı.
+MySQL tabloları arasında veri taşımak için sürükle-bırak tabanlı bir migration aracı.
 
 ## Özellikler
 - DB ve tablo listelerini otomatik çekme
@@ -10,6 +10,10 @@ MySQL tabloları arasında veri taşımak için sürükle‑bırak tabanlı bir 
 - Satır bazlı global PHP kuralı (satır atlama dahil)
 - Migration dosyası üretme ve çalıştırma
 
+## Sayfalar
+- `index.php`: Ana sayfa, mevcut migration dosyalarını listeler ve çalıştırır.
+- `create.php`: Migration oluşturma ekranı.
+
 ## Kurulum
 1. PHP 8+ önerilir
 2. MySQL erişimi gerekir
@@ -17,11 +21,12 @@ MySQL tabloları arasında veri taşımak için sürükle‑bırak tabanlı bir 
 
 ## Hızlı Başlangıç
 1. Tarayıcıdan `index.php` aç.
-2. Kaynak DB/Tablo ve Hedef DB/Tablo seç.
-3. Kolonları sürükle‑bırak ile eşle.
-4. Gerekirse datatype ve custom PHP ekle.
-5. `Generate Migration` ile dosyayı üret.
-6. `run.php?file=dosya_adi` ile çalıştır.
+2. `+ Migration Oluştur` ile `create.php` sayfasına geç.
+3. Kaynak DB/Tablo ve Hedef DB/Tablo seç.
+4. Kolonları sürükle-bırak ile eşle.
+5. Gerekirse datatype ve custom PHP ekle.
+6. `Generate Migration` ile dosyayı üret.
+7. Ana sayfaya dönüp migration dosyasına tıklayarak çalıştır.
 
 ## Örnek config.php
 ```php
@@ -45,13 +50,32 @@ return [
 ];
 ```
 
-## Custom PHP
-- Kolon bazlı: `+ PHP` ile açılır, `return` ile değer üretir.
-- Global: tüm satırlar için çalışır; `$skip = true;` ile satır atlanır.
+## Custom PHP Örnekleri
+Kolon bazlı (mapping satırındaki `+ PHP`):
+```php
+// string temizleme
+return trim($v);
+```
 
-## Çalıştırma
-- `run.php?file=dosya_adi`
-- Progress bar ile ilerleme gösterilir.
+```php
+// fiyat üzerine KDV ekleme
+return (float)$v * 1.20;
+```
+
+Global (sayfanın altındaki `Custom PHP (global)`):
+```php
+// pasif kayıtları atla
+if (isset($row["status"]) && $row["status"] === "passive") {
+    $skip = true;
+}
+```
+
+```php
+// telefon formatını normalize et
+if (isset($row["phone"])) {
+    $row["phone"] = preg_replace("/\\D+/", "", $row["phone"]);
+}
+```
 
 ## Dokümantasyon
 Detaylı kullanım için: `UI_GUIDE.md`
