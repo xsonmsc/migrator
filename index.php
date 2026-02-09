@@ -105,8 +105,9 @@ if (is_dir($dir)) {
     </header>
 
     <div class="container">
-        <div class="card">
+        <div class="card" style="display:flex;gap:8px;flex-wrap:wrap;">
             <button onclick="location.href='create.php'">+ Migration Oluştur</button>
+            <button class="secondary" onclick="location.reload()">Yenile</button>
         </div>
 
         <div class="card">
