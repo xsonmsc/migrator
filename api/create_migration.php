@@ -57,6 +57,30 @@ TableManager::createIfNotExists(
 
 $map=var_export($data["mappings"], true);
 
+$newCols = $data["new_columns"] ?? [];
+$mapCols = [];
+foreach (($data["mappings"] ?? []) as $m) {
+    $dtype = $m["datatype"] ?? "";
+    foreach (($m["targets"] ?? []) as $t) {
+        if (!$t) continue;
+        $mapCols[] = [
+            "name" => $t,
+            "type" => $dtype ?: "text"
+        ];
+    }
+}
+$allCols = array_merge($newCols, $mapCols);
+if (!empty($allCols)) {
+    $cols = var_export($allCols, true);
+    $code.="
+TableManager::addColumnsIfMissing(
+\$newDB,
+'{$data["table2"]}',
+{$cols}
+);
+";
+}
+
 $code.="
 \$mappings={$map};
 
@@ -100,9 +124,9 @@ foreach(\$rows as \$row)
 }
 
 echo '<script>
-document.getElementById("bar").style.width="100%";
-document.getElementById("bar").textContent="100%";
-setTimeout(function(){ window.location.href="index.php"; }, 1500);
+document.getElementById(\"bar\").style.width=\"100%\";
+document.getElementById(\"bar\").textContent=\"100%\";
+setTimeout(function(){ window.location.href=\"index.php\"; }, 1500);
 </script>';
 echo 'DONE';
 ";

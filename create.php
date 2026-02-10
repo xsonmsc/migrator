@@ -557,6 +557,7 @@ function generate(){
     }).then(r => r.json()).then(res => {
         if (res && res.ok) {
             alert(i18n("created") + " " + res.name);
+            window.location.href = "index.php";
         } else {
             alert(i18n("error") + " " + (res && res.error ? res.error : "unknown"));
         }
