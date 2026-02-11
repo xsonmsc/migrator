@@ -2,3 +2,4 @@ migrations/*
 backups/*
 !migrations/.gitkeep
 !backups/.gitkeep
+!uploads/.gitkeep
